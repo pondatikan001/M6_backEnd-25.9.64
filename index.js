@@ -38,7 +38,7 @@ app.post('/login', (req, res, next) =>{
     next();
 }, passport.authenticate('local',{
     successRedirect: '/success',
-    failureRedirect: '/fail'
+    failureRedirect: '/fail',
 })
 }))
 
@@ -62,11 +62,20 @@ app.get('/faill', (req, res) =>{
     res.render('faill');
 })
 
-
-app.post('/login', (req, res, next) =>{
-    //
+app.get('/home', isLoggendIn, (req, res) =>{
+    console.log(req.user);
+    res.end('home');
 })
 
+
+function isLoggendIn(req, res, next){
+    if(req.isAutenrticated()){
+        return next();
+    } else {
+        console.log('no loggend in ');
+        res.redirect('/fail');
+    }
+}
 const listerner = app.listen(3000, () =>{
     console.log('App is runnung on port' + listerner.address().port);
 })
